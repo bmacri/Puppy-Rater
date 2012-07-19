@@ -70,6 +70,9 @@ class DogDetails(GetDogs):
 		else:
 			return None
 
+	def dog_color(self, contents):
+		    #will need to crawl to a www.sfspca.org/adoptions/pet-details/spcaid page 
+
 	def dog_description(self, contents):
 	#will need to crawl to a www.sfspca.org/adoptions/pet-details/spcaid page 
 	
