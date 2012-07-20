@@ -1,15 +1,21 @@
 from superclass_GetDogs import GetDogs
+import sqlite3
+from flask import Flask, request, session, g, redirect, url_for, \
+		     abort, render_template, flash
 import re
 
 class DogDetails(GetDogs):
+
 	def __init__(self):
 		pass
-	
+
+
 	def trim_contents(self, contents):
 		begin_index = contents.find('<div class="view-content">')
         end_index = contents.find('<div class="item-list"><ul class="pager"><li class="pager-current first">1</li>')
 	    trimmed_contents = contents[begin_index:end_index] 
 		return trimmed_contents
+
 
 	def dog_name(self, contents):
 		contents = self.trim_contents(contents)
@@ -18,6 +24,7 @@ class DogDetails(GetDogs):
 		name_class = contents[begin_name_class_index:end_name_class_index + 1]
 		name = re.search("[A-z]+[a-z]+", contents)
 		return name
+
 
 	def dog_id(self, contents):
 		contents = self.trim_contents(contents)
@@ -30,7 +37,7 @@ class DogDetails(GetDogs):
             return spca_id
         else:
             return None
-											 
+
 
 	def dog_gender(self, contents):
 		contents = self.trim_contents(contents)
@@ -70,12 +77,34 @@ class DogDetails(GetDogs):
 		else:
 			return None
 
+
 	def dog_color(self, contents):
-		    #will need to crawl to a www.sfspca.org/adoptions/pet-details/spcaid page 
+		contents = self.trim_contents(contents)
+		begin_photo_field = contents.find('class="views-field-field-photo-fid">')
+		single_dog_begin_index = contents.find('a href=', begin_photo_field + 1)
+		single_dog_end_index = contents.find('"', single_dog_begin_index + 8)
+		url = 'http://www.sfspca.org' + contents[single_dog_begin_index + 8: single_dog_end_index]
+		contents = GetDogs.request_url_contents(url)
+		begin_color_class = contents.find('<p class="ap_type">COLOR:</p>')
+		find_attr_index = contents.find('ap_attr', begin_color_Class + 1)
+		end_attr_index = contents.find('</p>', find_attr_index + 1)
+		color = contents[find_attr_index + 9:end_attr_index]
+		return color
+
 
 	def dog_description(self, contents):
-	#will need to crawl to a www.sfspca.org/adoptions/pet-details/spcaid page 
-	
+		contents = self.trim_contents(contents)
+	    begin_photo_field = contents.find('class="views-field-field-photo-fid">')
+        single_dog_begin_index = contents.find('a href=', begin_photo_field + 1)
+        single_dog_end_index = contents.find('"', single_dog_begin_index + 8)
+        url = 'http://www.sfspca.org' + contents[single_dog_begin_index + 8: single_dog_end_index]
+		contents = GetDogs.request_url_contents(url)
+		begin_description_class = contents.find('"pet-detail">')
+		end_description_class = contents.find('</div>', begin_description_class + 1)
+		description = contents[begin_description + 11:end_description] 
+		return description
+
+
 	def dog_image(self, contents):
 		contents = self.trim_contents(contents)
 		begin_image_class_index = contents.find('<div class="views-field-field-photo-fid">')
