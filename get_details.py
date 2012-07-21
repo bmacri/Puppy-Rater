@@ -1,7 +1,6 @@
 import re
 import requests
 import settings
-import sqlite3
 
 from superclass_GetDogs import GetDogs
 
@@ -32,6 +31,7 @@ class DogDetails(GetDogs):
         end_quote = trimmed_contents.find('"', start_quote + 1)
         next_url = domain + trimmed_contents[start_quote + 1:end_quote]
         dog_url_list.append(next_url)
+        print dog_url_list
         rest_of_urls = self.individual_dog_urls(trimmed_contents[end_quote + 1:])
         dog_url_list.extend(rest_of_urls)
         return dog_url_list
@@ -86,6 +86,7 @@ class DogDetails(GetDogs):
         breed = re.search('<p class="ap_attr">([^<>]+?)<', trimmed_contents)
         if breed:
             breed = breed.group(1)
+            breed = breed.replace(',','\,')
             return breed
         return None
         
@@ -118,6 +119,8 @@ class DogDetails(GetDogs):
         begin_description = trimmed_contents.find('"pet-detail">')
         end_description = trimmed_contents.find('</div>', begin_description + 1)
         description = trimmed_contents[begin_description + 13:end_description]
+        description = description.replace('&#39;',"\'")
+        description = description.replace(',','\,')
         return description
 
 
@@ -130,6 +133,7 @@ contents = dog.file_contents(settings.project_path + 'alldogs.html')
 
 dog_url_list = dog.individual_dog_urls(contents)
 assert dog_url_list[0] == 'http://www.sfspca.org/adoptions/pet-details/10424952-1', dog_url_list[0]
+#assert dog_url_list[1] == 'http://www.sfspca.org/adoptions/pet-details/15861286-1', dog_url_list[1]
 
 contents = dog.file_contents(settings.project_path + 'singledog.html')
 single_dog_dict = dog.dog_details(contents)
@@ -138,12 +142,23 @@ assert single_dog_dict['image'] == 'http://www.sfspca.org/sites/default/files/im
 assert single_dog_dict['name'] == 'Lychee', single_dog_dict['name']
 assert single_dog_dict['spca_id'] == '10424952', single_dog_dict['spca_id']
 assert single_dog_dict['gender'] == 'Female', single_dog_dict['gender']
-assert single_dog_dict['breed'] == 'Chihuahua, Short Coat', single_dog_dict['breed']
+assert single_dog_dict['breed'] == 'Chihuahua\, Short Coat', single_dog_dict['breed']
 assert single_dog_dict['color'] == 'Tan', single_dog_dict['color']
 assert single_dog_dict['age'] == '3y 8m', single_dog_dict['age']
-assert single_dog_dict['description'] == 'Lychee is a friendly, curious, somewhat shy at first lady who&#39;s heart&#39;s desire is to be someone&#39;s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.', single_dog_dict['description']
+assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']
 
-detail_dict = dog.dog_details(contents)
-dog_details_to_db(contents)
+def populate_db(contents):
+    dog_url_list = dog.individual_dog_urls(contents)
+    for url in dog_url_list:
+        contents = dog.return_webpage_contents(url)
+        dog_detail_dict = dog.dog_details(contents)
+        dog.dog_details_to_db(dog_detail_dict)
+    return
+        
+        
+contents = dog.file_contents(settings.project_path + 'alldogs.html')
+populate_db(contents)
+
+
 
 

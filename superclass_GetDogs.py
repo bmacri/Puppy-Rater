@@ -1,8 +1,10 @@
+import codecs
 import MySQLdb
+import pdb
 import requests
 import settings
 
-from datetime import date
+path = '/home/bethany/hackerschool/Puppy_Rater/pupfiles/'
 
 class GetDogs():
     def __init__():
@@ -13,28 +15,29 @@ class GetDogs():
         return r
 
     def create_filename(self, url):
-        now = datetime.datetime.now()
-        filename = url + now
+        url_sections = url.split('/')
+        filename = path + url_sections[-1] + '.html'
         return filename
         
     def save_contents(self, url):
-        r = requests_url_contents(url)
+        r = self.requests_url_contents(url)
         contents = r.text
-        filename = create_filename(url)
-        f = open(filename, 'w')
+        filename = self.create_filename(url)
+        #pdb.set_trace()
+        #print repr(filename)
+        f = codecs.open(filename, 'w', encoding='utf-8')
         f.write(contents)
         f.close
+        return filename
 
     def file_contents(self,filename):
-        f = open(filename, 'r')
+        f = codecs.open(filename, 'r', encoding='utf-8')
         contents = f.read()
         f.close()
         return contents
 
     def return_webpage_contents(self,url):
-        r = self.requests_url_contents(url)
-        filename = self.create_filename(url)
-        self.save_contents(url)
+        filename = self.save_contents(url)
         contents = self.file_contents(filename)
         return contents
 
@@ -56,7 +59,9 @@ class GetDogs():
                                 user="root",
                                 passwd = settings.db_password,
                                 db="spcadogs")
+        #pdb.set_trace()
         cursor = conn.cursor()
-        rows = cursor.fetchall()
-        if len(rows) == 0: 
-            cursor.execute (" INSERT INTO details (name,spca_id,gender,breed,color,age,description,image) VALUES (%s,%s,%s,%s,%s,%s) ", (detail_dict['name'],detail_dict['spca_id'],detail_dict['gender'],detail_dict['breed'],detail_dict['color'], detail_dict['age'],detail_dict['description'],detail_dict['image']))
+        #cursor.execute("TRUNCATE dogdetails;")
+        #conn.commit()
+        cursor.execute ("INSERT INTO dogdetails (name, spca_id, gender, breed, color, age, description, image) VALUES (%(name)s, %(spca_id)s, %(gender)s, %(breed)s, %(color)s, %(age)s, %(description)s, %(image)s);", detail_dict)
+        conn.commit()
