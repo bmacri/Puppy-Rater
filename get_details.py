@@ -63,7 +63,7 @@ class DogDetails(GetDogs):
         trimmed_contents = self.trim_contents_singledog(contents)
         find_name_index = trimmed_contents.find('NAME:')
         trimmed_contents = trimmed_contents[find_name_index:]
-        name = re.search("[A-Z]+[a-z]+", trimmed_contents)
+        name = re.search("([A-Z]+[a-z]+ *)+", trimmed_contents)
         if name:
             name = name.group()
             return name
