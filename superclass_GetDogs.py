@@ -59,9 +59,6 @@ class GetDogs():
                                 user="root",
                                 passwd = settings.db_password,
                                 db="spcadogs")
-        #pdb.set_trace()
         cursor = conn.cursor()
-        #cursor.execute("TRUNCATE dogdetails;")
-        #conn.commit()
         cursor.execute ("INSERT INTO dogdetails (name, spca_id, gender, breed, color, age, description, image) VALUES (%(name)s, %(spca_id)s, %(gender)s, %(breed)s, %(color)s, %(age)s, %(description)s, %(image)s);", detail_dict)
         conn.commit()

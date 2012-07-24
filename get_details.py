@@ -17,22 +17,21 @@ class DogDetails(GetDogs):
         return trimmed_contents
         
 
-    def individual_dog_urls(self, contents):
+    def individual_dog_urls(self, contents): #this is going through multiple times, starting from the beginning 
         domain = "http://www.sfspca.org"
+        end_contents_index = contents.find('<span class="sendToFriend"><a title="Email to a friend" href="/printmail/14">email a friend</a></span>')
+        contents = contents[:end_contents_index]
         dog_url_list = []
-        begin_index = contents.find('<div class="view-content">')
-        end_index = contents.find('<div class="item-list"><ul class="pager"><li class="pager-current first">1</li>', begin_index + 1)
-        trimmed_contents = contents[begin_index:end_index] 
-        animal_name_class = trimmed_contents.find('"views-field-field-animal-name-value"')
+        animal_name_class = contents.find('"views-field-field-animal-name-value"')
         if animal_name_class == -1:
             return dog_url_list
-        link_tag = trimmed_contents.find('<a href=', animal_name_class + 1)
-        start_quote = trimmed_contents.find('"', link_tag + 1)
-        end_quote = trimmed_contents.find('"', start_quote + 1)
-        next_url = domain + trimmed_contents[start_quote + 1:end_quote]
+        link_tag = contents.find('<a href=', animal_name_class + 1)
+        start_quote = contents.find('"', link_tag + 1)
+        end_quote = contents.find('"', start_quote + 1)
+        next_url = domain + contents[start_quote + 1:end_quote]
         dog_url_list.append(next_url)
         print dog_url_list
-        rest_of_urls = self.individual_dog_urls(trimmed_contents[end_quote + 1:])
+        rest_of_urls = self.individual_dog_urls(contents[end_quote + 1:])
         dog_url_list.extend(rest_of_urls)
         return dog_url_list
         
@@ -133,7 +132,9 @@ contents = dog.file_contents(settings.project_path + 'alldogs.html')
 
 dog_url_list = dog.individual_dog_urls(contents)
 assert dog_url_list[0] == 'http://www.sfspca.org/adoptions/pet-details/10424952-1', dog_url_list[0]
-#assert dog_url_list[1] == 'http://www.sfspca.org/adoptions/pet-details/15861286-1', dog_url_list[1]
+assert dog_url_list[1] == 'http://www.sfspca.org/adoptions/pet-details/15425048-3', dog_url_list[1]
+assert dog_url_list[-1] == 'http://www.sfspca.org/adoptions/pet-details/16563222-0', dog_url_list[-1]
+assert len(dog_url_list) == 21; len(dog_url_list)
 
 contents = dog.file_contents(settings.project_path + 'singledog.html')
 single_dog_dict = dog.dog_details(contents)
@@ -158,7 +159,6 @@ def populate_db(contents):
         
 contents = dog.file_contents(settings.project_path + 'alldogs.html')
 populate_db(contents)
-
 
 
 
