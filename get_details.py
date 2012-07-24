@@ -130,7 +130,7 @@ contents = dog.file_contents(settings.project_path + 'alldogs.html')
 dog_url_list = dog.individual_dog_urls(contents)
 assert dog_url_list[0] == 'http://www.sfspca.org/adoptions/pet-details/10424952-1', dog_url_list[0]
 assert dog_url_list[1] == 'http://www.sfspca.org/adoptions/pet-details/15425048-3', dog_url_list[1]
-assert dog_url_list[-1] == 'http://www.sfspca.org/adoptions/pet-details/16563222-0', dog_url_list[-1]
+assert dog_url_list[-1] == 'http://www.sfspca.org/adoptions/pet-details/16447161-2', dog_url_list[-1]
 assert len(dog_url_list) == 21; len(dog_url_list)
 
 contents = dog.file_contents(settings.project_path + 'singledog.html')
