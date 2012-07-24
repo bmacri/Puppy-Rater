@@ -17,11 +17,8 @@ class DogDetails(GetDogs):
         return trimmed_contents
         
 
-    def individual_dog_urls(self, contents): #this is going through multiple times, starting from the beginning 
+    def individual_dog_urls(self, contents, dog_url_list=[]):
         domain = "http://www.sfspca.org"
-        end_contents_index = contents.find('<span class="sendToFriend"><a title="Email to a friend" href="/printmail/14">email a friend</a></span>')
-        contents = contents[:end_contents_index]
-        dog_url_list = []
         animal_name_class = contents.find('"views-field-field-animal-name-value"')
         if animal_name_class == -1:
             return dog_url_list
@@ -31,8 +28,7 @@ class DogDetails(GetDogs):
         next_url = domain + contents[start_quote + 1:end_quote]
         dog_url_list.append(next_url)
         print dog_url_list
-        rest_of_urls = self.individual_dog_urls(contents[end_quote + 1:])
-        dog_url_list.extend(rest_of_urls)
+        rest_of_urls = self.individual_dog_urls(contents[end_quote + 1:], dog_url_list)
         return dog_url_list
         
     def dog_image(self, contents):
