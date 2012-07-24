@@ -52,6 +52,7 @@ class GetDogs():
         detail_dict['age'] = self.dog_age(contents)
         detail_dict['description'] = self.dog_description(contents)
         detail_dict['image'] = self.dog_image(contents)
+        print detail_dict
         return detail_dict
 
     def dog_details_to_db(self, detail_dict):

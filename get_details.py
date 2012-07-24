@@ -27,7 +27,7 @@ class DogDetails(GetDogs):
         end_quote = contents.find('"', start_quote + 1)
         next_url = domain + contents[start_quote + 1:end_quote]
         dog_url_list.append(next_url)
-        print dog_url_list
+        #print dog_url_list
         rest_of_urls = self.individual_dog_urls(contents[end_quote + 1:], dog_url_list)
         return dog_url_list
         
@@ -59,6 +59,7 @@ class DogDetails(GetDogs):
         spca_id = re.search("[0-9]+", trimmed_contents)
         if spca_id:
             spca_id = spca_id.group()
+            print spca_id
             return spca_id
         return None
         
@@ -121,7 +122,7 @@ class DogDetails(GetDogs):
 
 
 
-#-----------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------
 dog = DogDetails()
 
 contents = dog.file_contents(settings.project_path + 'alldogs.html')
@@ -144,12 +145,14 @@ assert single_dog_dict['color'] == 'Tan', single_dog_dict['color']
 assert single_dog_dict['age'] == '3y 8m', single_dog_dict['age']
 assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']
 
+#-------------------------------------------------------------------------------------------------------------------------------------------
 def populate_db(contents):
     dog_url_list = dog.individual_dog_urls(contents)
     for url in dog_url_list:
+        print url
         contents = dog.return_webpage_contents(url)
         dog_detail_dict = dog.dog_details(contents)
-        dog.dog_details_to_db(dog_detail_dict)
+        #dog.dog_details_to_db(dog_detail_dict)
     return
         
         
