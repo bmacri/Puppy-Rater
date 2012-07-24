@@ -9,15 +9,18 @@ path = '/home/bethany/hackerschool/Puppy_Rater/pupfiles/'
 class GetDogs():
     def __init__():
         pass
+        
 
     def requests_url_contents(self, url):
         r = requests.get(url)
         return r
+        
 
     def create_filename(self, url):
         url_sections = url.split('/')
         filename = path + url_sections[-1] + '.html'
         return filename
+        
         
     def save_contents(self, url):
         r = self.requests_url_contents(url)
@@ -29,18 +32,20 @@ class GetDogs():
         f.write(contents)
         f.close
         return filename
+        
 
     def file_contents(self,filename):
         f = codecs.open(filename, 'r', encoding='utf-8')
         contents = f.read()
         f.close()
         return contents
+        
 
     def return_webpage_contents(self,url):
         filename = self.save_contents(url)
         contents = self.file_contents(filename)
         return contents
-
+        
 
     def dog_details(self, contents):
         detail_dict = {}
@@ -54,6 +59,7 @@ class GetDogs():
         detail_dict['image'] = self.dog_image(contents)
         print detail_dict
         return detail_dict
+        
 
     def dog_details_to_db(self, detail_dict):
         conn = MySQLdb.connect(host= "localhost",

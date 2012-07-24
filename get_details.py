@@ -31,6 +31,23 @@ class DogDetails(GetDogs):
         rest_of_urls = self.individual_dog_urls(contents[end_quote + 1:], dog_url_list)
         return dog_url_list
         
+    
+    def goto_next_page(self, contents, url):
+        if contents.find('"Go to next page"') == -1:
+            return contents, url
+        else:
+            if type(url[-1]) == 'int':
+                pagenum = url[-1]
+                pagenum += 1
+                url = url[:-1]
+                url.append('?page=%d' % pagenum)
+            else:
+                url.append('?page=1')   
+            contents = return_webpage_contents(url)
+            self.goto_next_page(contents, url) 
+        return contents, url #not sure i want to return url here, but need to for recursive call...
+            
+        
     def dog_image(self, contents):
         trimmed_contents = self.trim_contents_singledog(contents)
         begin_image_section = trimmed_contents.find('<h1 class')
@@ -51,6 +68,7 @@ class DogDetails(GetDogs):
             name = name.group()
             return name
         return None
+        
 
     def dog_id(self, contents):
         trimmed_contents = self.trim_contents_singledog(contents)
