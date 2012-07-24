@@ -131,6 +131,9 @@ class DogDetails(GetDogs):
     def dog_description(self, contents):
         trimmed_contents = self.trim_contents_singledog(contents)
         begin_description = trimmed_contents.find('"pet-detail">')
+        if begin_description == -1:
+            description = 'No description available'
+            return description
         end_description = trimmed_contents.find('</div>', begin_description + 1)
         description = trimmed_contents[begin_description + 13:end_description]
         description = description.replace('&#39;',"\'")
@@ -143,7 +146,7 @@ class DogDetails(GetDogs):
 #-------------------------------------------------------------------------------------------------------------------------------------------
 dog = DogDetails()
 
-contents = dog.file_contents(settings.project_path + 'alldogs.html')
+'''contents = dog.file_contents(settings.project_path + 'alldogs.html')
 
 dog_url_list = dog.individual_dog_urls(contents)
 assert dog_url_list[0] == 'http://www.sfspca.org/adoptions/pet-details/10424952-1', dog_url_list[0]
@@ -161,7 +164,7 @@ assert single_dog_dict['gender'] == 'Female', single_dog_dict['gender']
 assert single_dog_dict['breed'] == 'Chihuahua\, Short Coat', single_dog_dict['breed']
 assert single_dog_dict['color'] == 'Tan', single_dog_dict['color']
 assert single_dog_dict['age'] == '3y 8m', single_dog_dict['age']
-assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']
+assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']'''
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
 def populate_db(contents):
@@ -174,7 +177,8 @@ def populate_db(contents):
     return
         
         
-contents = dog.file_contents(settings.project_path + 'alldogs.html')
+#contents = dog.file_contents(settings.project_path + 'alldogs.html')
+contents = dog.file_contents(settings.project_path + 'alldogs2.html')
 populate_db(contents)
 
 
