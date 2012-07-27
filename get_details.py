@@ -189,6 +189,12 @@ def populate_db(all_contents):
         all_contents = dog.return_webpage_contents(next_page)
         next_page = dog.goto_next_page(all_contents)
         print next_page
+    dog_url_list = dog.individual_dog_urls(all_contents, [])
+    for url in dog_url_list:
+        print url
+        contents = dog.return_webpage_contents(url)
+        dog_detail_dict = dog.dog_details(contents)
+        dog.dog_details_to_db(dog_detail_dict)
     return
     
         
