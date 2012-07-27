@@ -32,20 +32,13 @@ class DogDetails(GetDogs):
         return dog_url_list
         
     
-    def goto_next_page(self, contents, url):
-        if contents.find('"Go to next page"') == -1:
-            return contents, url
-        else:
-            if type(url[-1]) == 'int':
-                pagenum = url[-1]
-                pagenum += 1
-                url = url[:-1]
-                url.append('?page=%d' % pagenum)
-            else:
-                url.append('?page=1')   
-            contents = return_webpage_contents(url)
-            self.goto_next_page(contents, url) 
-        return contents, url #not sure i want to return url here, but need to for recursive call...
+    def goto_next_page(self, contents):
+        domain = 'http://www.sfspca.org'
+        next_page_index = contents.find('"pager-next"')
+        url_begin_index = contents.find('<a href="', next_page_index)
+        url_end_index = contents.find('"', url_begin_index + 10)
+        url = domain + contents[url_begin_index + 9:url_end_index]
+        return url
             
         
     def dog_image(self, contents):
@@ -146,13 +139,15 @@ class DogDetails(GetDogs):
 #-------------------------------------------------------------------------------------------------------------------------------------------
 dog = DogDetails()
 
-'''contents = dog.file_contents(settings.project_path + 'alldogs.html')
+contents = dog.file_contents(settings.project_path + 'alldogs.html')
 
 dog_url_list = dog.individual_dog_urls(contents)
 assert dog_url_list[0] == 'http://www.sfspca.org/adoptions/pet-details/10424952-1', dog_url_list[0]
 assert dog_url_list[1] == 'http://www.sfspca.org/adoptions/pet-details/15425048-3', dog_url_list[1]
 assert dog_url_list[-1] == 'http://www.sfspca.org/adoptions/pet-details/16447161-2', dog_url_list[-1]
 assert len(dog_url_list) == 21; len(dog_url_list)
+
+assert dog.goto_next_page(contents) == 'http://www.sfspca.org/adoptions/dogs?page=1', dog.goto_next_page(contents)
 
 contents = dog.file_contents(settings.project_path + 'singledog.html')
 single_dog_dict = dog.dog_details(contents)
@@ -164,22 +159,23 @@ assert single_dog_dict['gender'] == 'Female', single_dog_dict['gender']
 assert single_dog_dict['breed'] == 'Chihuahua\, Short Coat', single_dog_dict['breed']
 assert single_dog_dict['color'] == 'Tan', single_dog_dict['color']
 assert single_dog_dict['age'] == '3y 8m', single_dog_dict['age']
-assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']'''
+assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
-def populate_db(contents):
-    dog_url_list = dog.individual_dog_urls(contents)
-    for url in dog_url_list:
-        print url
-        contents = dog.return_webpage_contents(url)
-        dog_detail_dict = dog.dog_details(contents)
-        #dog.dog_details_to_db(dog_detail_dict)
+'''def populate_db(contents):
+    while contents.find('"Go to next page"') != -1:
+        dog_url_list = dog.individual_dog_urls(contents)
+        for url in dog_url_list:
+            print url
+            contents = dog.return_webpage_contents(url)
+            dog_detail_dict = dog.dog_details(contents)
+            #dog.dog_details_to_db(dog_detail_dict)
     return
         
         
 #contents = dog.file_contents(settings.project_path + 'alldogs.html')
 contents = dog.file_contents(settings.project_path + 'alldogs2.html')
-populate_db(contents)
+populate_db(contents)'''
 
 
 
