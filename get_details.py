@@ -173,10 +173,11 @@ def populate_db(all_contents):
             contents = dog.return_webpage_contents(url)
             dog_detail_dict = dog.dog_details(contents)
             dog.dog_details_to_db(dog_detail_dict)
-        next_url = dog.goto_next_page(all_contents)
-        print next_url
-        all_contents = dog.return_webpage_contents(next_url) 
-        populate_db(all_contents)
+        print next_page
+        all_contents = dog.return_webpage_contents(next_page)
+        next_page = dog.goto_next_page(all_contents)
+        print next_page
+    return
     
         
         
