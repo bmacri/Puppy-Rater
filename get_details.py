@@ -1,3 +1,4 @@
+import MySQLdb
 import re
 import requests
 import settings
@@ -135,7 +136,7 @@ class DogDetails(GetDogs):
         description = description.replace(',','\,')
         return description
 
-
+    
 
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
@@ -164,10 +165,21 @@ assert single_dog_dict['age'] == '3y 8m', single_dog_dict['age']
 assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']
 '''
 #-------------------------------------------------------------------------------------------------------------------------------------------
+def truncate():
+    conn = MySQLdb.connect(host= "localhost",
+                                user="root",
+                                passwd = settings.db_password,
+                                db="spcadogs")
+    cursor = conn.cursor()
+    cursor.execute ("TRUNCATE dogdetails;")
+    conn.commit()
+        
 def populate_db(all_contents):
+    truncate()
     next_page = dog.goto_next_page(all_contents)
     while next_page:
-        dog_url_list = dog.individual_dog_urls(all_contents)
+        dog_url_list = dog.individual_dog_urls(all_contents, [])
+        print dog_url_list
         for url in dog_url_list:
             print url
             contents = dog.return_webpage_contents(url)
