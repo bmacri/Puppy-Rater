@@ -35,6 +35,8 @@ class DogDetails(GetDogs):
     def goto_next_page(self, contents):
         domain = 'http://www.sfspca.org'
         next_page_index = contents.find('"pager-next"')
+        if next_page_index == -1:
+            return False
         url_begin_index = contents.find('<a href="', next_page_index)
         url_end_index = contents.find('"', url_begin_index + 10)
         url = domain + contents[url_begin_index + 9:url_end_index]
@@ -162,21 +164,24 @@ assert single_dog_dict['age'] == '3y 8m', single_dog_dict['age']
 assert single_dog_dict['description'] == "Lychee is a friendly\, curious\, somewhat shy at first lady who\'s heart\'s desire is to be someone\'s constant friend. She can get a bit overwhelmed at too much noise so would prefer someone who is more book-worm than rock-star.  She is a volunteer favorite for her affectionate personality and stellar leash manners.  She would love to be the only dog in her household.", single_dog_dict['description']
 '''
 #-------------------------------------------------------------------------------------------------------------------------------------------
-def populate_db(contents):
-    while contents.find('"Go to next page"') != -1:
-        dog_url_list = dog.individual_dog_urls(contents)
+def populate_db(all_contents):
+    next_page = dog.goto_next_page(all_contents)
+    while next_page:
+        dog_url_list = dog.individual_dog_urls(all_contents)
         for url in dog_url_list:
             print url
             contents = dog.return_webpage_contents(url)
             dog_detail_dict = dog.dog_details(contents)
             dog.dog_details_to_db(dog_detail_dict)
-        url = dog.goto_next_page(contents)
-        contents = dog.return_webpage_contents(url) 
-    return
+        next_url = dog.goto_next_page(all_contents)
+        print next_url
+        all_contents = dog.return_webpage_contents(next_url) 
+        populate_db(all_contents)
+    
         
         
-contents = dog.return_webpage_contents('http://www.sfspca.org/adoptions/dogs')
-populate_db(contents)
+all_contents = dog.return_webpage_contents('http://www.sfspca.org/adoptions/dogs')
+populate_db(all_contents)
 
 
 
