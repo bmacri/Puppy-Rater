@@ -4,7 +4,7 @@ import pdb
 import requests
 import settings
 
-path = '/home/bethany/hackerschool/Puppy_Rater/pupfiles/'
+path = settings.project_path + 'pupfiles'
 
 class GetDogs():
     def __init__():
