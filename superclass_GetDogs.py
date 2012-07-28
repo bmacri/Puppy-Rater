@@ -57,7 +57,7 @@ class GetDogs():
         detail_dict['age'] = self.dog_age(contents)
         detail_dict['description'] = self.dog_description(contents)
         detail_dict['image'] = self.dog_image(contents)
-        print detail_dict
+        #print detail_dict
         return detail_dict
         
 
@@ -76,6 +76,8 @@ class GetDogs():
                                 passwd = settings.db_password,
                                 db="spcadogs")
         cursor = conn.cursor()
-        cursor.execute ("SELECT * FROM dogdetails")        
+        cursor.execute ("SELECT * FROM dogdetails;")
+        all_db_data = cursor.fetchall()     
         conn.commit()
+        return all_db_data
         

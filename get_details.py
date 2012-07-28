@@ -73,7 +73,7 @@ class DogDetails(GetDogs):
         spca_id = re.search("[0-9]+", trimmed_contents)
         if spca_id:
             spca_id = spca_id.group()
-            print spca_id
+            #print spca_id
             return spca_id
         return None
         
@@ -196,6 +196,9 @@ def populate_db(all_contents):
         
 all_contents = dog.return_webpage_contents('http://www.sfspca.org/adoptions/dogs')
 populate_db(all_contents)
+
+data = dog.details_from_db()
+print data
 
 
 
