@@ -4,7 +4,7 @@ import pdb
 import requests
 import settings
 
-path = settings.project_path + 'pupfiles'
+path = settings.project_path + 'pupfiles/'
 
 class GetDogs():
     def __init__():
@@ -69,3 +69,13 @@ class GetDogs():
         cursor = conn.cursor()
         cursor.execute ("INSERT INTO dogdetails (name, spca_id, gender, breed, color, age, description, image) VALUES (%(name)s, %(spca_id)s, %(gender)s, %(breed)s, %(color)s, %(age)s, %(description)s, %(image)s);", detail_dict)
         conn.commit()
+        
+    def details_from_db(self):
+        conn = MySQLdb.connect(host= "localhost",
+                                user="root",
+                                passwd = settings.db_password,
+                                db="spcadogs")
+        cursor = conn.cursor()
+        cursor.execute ("SELECT * FROM dogdetails")        
+        conn.commit()
+        
