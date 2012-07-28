@@ -194,11 +194,11 @@ def populate_db(all_contents):
     
         
         
-all_contents = dog.return_webpage_contents('http://www.sfspca.org/adoptions/dogs')
-populate_db(all_contents)
-
-data = dog.details_from_db()
-print data
+if __name__ == '__main__':
+    all_contents = dog.return_webpage_contents('http://www.sfspca.org/adoptions/dogs')
+    populate_db(all_contents)
+    data = dog.details_from_db()
+    print data
 
 
 
