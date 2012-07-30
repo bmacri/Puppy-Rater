@@ -9,6 +9,21 @@ dog = DogDetails()
 class DogFromDB():
     pass
     
+    
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != app.config['USERNAME']:
+            error = 'Invalid username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('show_all_dogs'))
+    return render_template('login.html', error=error)
+    
 
 @app.route('/dogs')
 def show_all_dogs():
@@ -26,6 +41,8 @@ def show_all_dogs():
         db_dog.image = each_dog[7]
         dog_info_list.append(db_dog)
     return render_template('template.html', db_dogs=dog_info_list)
+    
+
 
 app.debug = True 
 

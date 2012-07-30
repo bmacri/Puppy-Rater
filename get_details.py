@@ -119,9 +119,10 @@ class DogDetails(GetDogs):
         age = re.search("([0-9]+y) ([0-9]+m)", trimmed_contents)
         if age:
             age = age.group()
-            return age
+            
         else:
-            return None
+            age = "Age not listed"
+        return age
 
 
     def dog_description(self, contents):
