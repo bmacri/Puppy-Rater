@@ -96,7 +96,7 @@ class DogDetails(GetDogs):
         breed = re.search('<p class="ap_attr">([^<>]+?)<', trimmed_contents)
         if breed:
             breed = breed.group(1)
-            breed = breed.replace(',','\,')
+            #breed = breed.replace(',','\,')
             return breed
         return None
         
@@ -133,7 +133,6 @@ class DogDetails(GetDogs):
         end_description = trimmed_contents.find('</div>', begin_description + 1)
         description = trimmed_contents[begin_description + 13:end_description]
         description = description.replace('&#39;',"\'")
-        description = description.replace(',','\,')
         return description
 
     

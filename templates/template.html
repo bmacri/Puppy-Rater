@@ -1,0 +1,13 @@
+<!doctype html>
+<title>Dogs</title>
+<h1>Dogs Available for Adoption in SF</h1>
+<ul style="list-style: none;">
+  {% for each_dog in db_dogs %}
+    <li><img src="{{ each_dog.image }}"></li>
+    <li>{{ each_dog.name }}</li>
+    <li>{{ each_dog.breed }} - {{ each_dog.color }}</li>
+    <li>{{ each_dog.age }}</li>
+    <li>{{ each_dog.gender }}</li>
+    <li>{{ each_dog.description }}</li><br><br><br>
+  {% endfor %}
+</ul>
