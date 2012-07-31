@@ -1,8 +1,16 @@
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from get_details import DogDetails
+import settings
+
+DEBUG = True
+SECRET_KEY = settings.secret_key
+USERNAME = settings.username
+PASSWORD = settings.password
+
 
 app = Flask(__name__)
+app.config.from_object(__name__)
 
 dog = DogDetails()
 
@@ -24,6 +32,12 @@ def login():
             return redirect(url_for('show_all_dogs'))
     return render_template('login.html', error=error)
     
+    
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect(url_for('show_all_dogs  '))
 
 @app.route('/dogs')
 def show_all_dogs():
@@ -42,7 +56,6 @@ def show_all_dogs():
         dog_info_list.append(db_dog)
     return render_template('template.html', db_dogs=dog_info_list)
     
-
 
 app.debug = True 
 
