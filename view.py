@@ -68,6 +68,7 @@ def add_comment():
     g.db.execute('insert into comments (text) values (?)',
                  [request.form['text']])
     g.db.commit()
+    flash('Comment has been saved')
     return redirect(url_for('show_comments'))
     
 
