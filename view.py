@@ -1,10 +1,10 @@
-import sqlite3
+from __future__ import with_statement
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from get_details import DogDetails
+from contextlib import closing
 import settings
 
-DATABASE = '/tmp/flaskr.db'
 DEBUG = True
 SECRET_KEY = settings.secret_key
 USERNAME = settings.username
@@ -12,27 +12,14 @@ PASSWORD = settings.password
 
 
 app = Flask(__name__)
-app.config.from_object(__name__)
-
-
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
-    
-def init_db():
-    with closing(connect_db()) as db:
-        with app.open_resource('DATABASE') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+#app.config.from_object(__name__)
 
 dog = DogDetails()
 
 class DogFromDB():
     pass
     
-@app.before_request
-def before_request():
-    g.db = connect_db()
-
+    
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -52,23 +39,20 @@ def login():
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
-    return redirect(url_for('show_all_dogs  '))
+    return redirect(url_for('show_all_dogs'))
 
 
 @app.route('/')
 def show_comments():
-    cur = g.db.execute('select text from comments order by id desc')
-    comments = [dict(text=row[0]) for row in cur.fetchall()]
+    comments = dog.get_comments()
     return render_template('template.html', comments=comments)
 
 @app.route('/add', methods=['POST'])
 def add_comment():
     if not session.get('logged_in'):
         abort(401)
-    g.db.execute('insert into comments (text) values (?)',
-                 [request.form['text']])
-    g.db.commit()
-    flash('Comment has been saved')
+    dog.post_comments()
+    flash('Your comment has been saved')
     return redirect(url_for('show_comments'))
     
 

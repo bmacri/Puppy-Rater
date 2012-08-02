@@ -62,10 +62,10 @@ class GetDogs():
         
 
     def dog_details_to_db(self, detail_dict):
-        conn = MySQLdb.connect(host= "localhost",
-                                user="root",
+        conn = MySQLdb.connect(host = "localhost",
+                                user ="root",
                                 passwd = settings.db_password,
-                                db="spcadogs")
+                                db ="spcadogs")
         cursor = conn.cursor()
         cursor.execute ("INSERT INTO dogdetails (name, spca_id, gender, breed, color, age, description, image) VALUES (%(name)s, %(spca_id)s, %(gender)s, %(breed)s, %(color)s, %(age)s, %(description)s, %(image)s);", detail_dict)
         conn.commit()
@@ -80,4 +80,25 @@ class GetDogs():
         all_db_data = cursor.fetchall()     
         conn.commit()
         return all_db_data
+        
+    def post_comments(self):
+        conn = MySQL.connect(host = "localhost",
+                             user = "root",
+                             passwd = settings.db_password,
+                             db = "spcadogs")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO comments ();")
+        conn.commit()
+        
+    def get_comments():
+        conn = MySQL.connect(host= "localhost",
+                                user="root",
+                                passwd = settings.db_password,
+                                db="spcadogs")
+        cursor.execute ("SELECT * FROM comments;")
+        comments = cursor.fetchall()     
+        conn.commit()
+        return comments    
+
+        
         
