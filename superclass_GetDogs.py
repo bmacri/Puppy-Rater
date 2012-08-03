@@ -59,7 +59,7 @@ class GetDogs():
         detail_dict['image'] = self.dog_image(contents)
         #print detail_dict
         return detail_dict
-        
+    
 
     def dog_details_to_db(self, detail_dict):
         conn = MySQLdb.connect(host = "localhost",
@@ -81,24 +81,25 @@ class GetDogs():
         conn.commit()
         return all_db_data
         
-    def post_comments(self):
-        conn = MySQL.connect(host = "localhost",
+    def insert_comments(self, comments_dict):
+        conn = MySQLdb.connect(host = "localhost",
                              user = "root",
                              passwd = settings.db_password,
                              db = "spcadogs")
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO comments ();")
+        cursor.execute("INSERT INTO dogratings (comments) VALUES (%(comments_input)s);", comments_dict)
         conn.commit()
         
-    def get_comments():
-        conn = MySQL.connect(host= "localhost",
+    def select_comments(self):
+        conn = MySQLdb.connect(host= "localhost",
                                 user="root",
                                 passwd = settings.db_password,
                                 db="spcadogs")
-        cursor.execute ("SELECT * FROM comments;")
+        cursor = conn.cursor()
+        cursor.execute ("SELECT * FROM dogratings;")
         comments = cursor.fetchall()     
         conn.commit()
-        return comments    
+        return comments
 
         
         

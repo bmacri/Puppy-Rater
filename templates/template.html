@@ -1,11 +1,33 @@
 <!doctype html>
 <title>Dogs</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
+{% if session.logged_in %}
+<div style="float: right;"><a href="{{ url_for('logout') }}">log out</a></div><br><br>
+{% endif %}
+
 <h1>SF SPCA Dogs Available for Adoption</h1><br><br>
-        
+
+<!--MAKE ALL FORMS ONE FORM, THEN STYLE-->
 <ul style="list-style: none;">
   {% for each_dog in db_dogs %}
-        <div style="float: right;">
+  <div style="float: right;">
+        {% if session.logged_in %}
+    <form action="{{ url_for('add_comment') }}" method=post class=add-comment>
+      <dl>
+        <dt>Comments:
+        <dd><textarea name=text rows=5 cols=50></textarea>
+        <input type="hidden" name="spca_id" value=spca_id>
+        <dd><input type=submit value=Save>
+      </dl>
+    
+  {% endif %}
+  <ul class=comments>
+  {% for comment in comments %}
+    <li>{{ comment.text }}
+  {% endfor %}
+  </ul>
+        
         <br>
         <form action="">
             <select name="Cuteness Rating">
@@ -15,31 +37,18 @@
             <option value="Not bad">Not bad</option>
             <option value="Woof">Woof</option>
             </select>
-            </form><br><br>
+            
         
-        <form action="">
-        <select value="Personality Rating" selected="selected">
-        <option value="One of the family">Perfect fit</option>
-        <option value="Will require some training">Will require some training</option>
-        <option value="May require too much training">May require too much training</option>
-        <option value="Someone will end up dead">Someone might die</option>
-        </select>
-        </form><br>
         
-        {% if session.logged_in %}
-    <form action="{{ url_for('add_comment') }}" method=post class=add-comment>
-      <dl>
-        <dt>Comments:
-        <dd><textarea name=text rows=5 cols=50></textarea>
-        <dd><input type=submit value=Save>
-      </dl>
-    </form>
-  {% endif %}
-  <ul class=comments>
-  {% for comment in comments %}
-    <li>{{ comment.text }}
-  {% endfor %}
-  </ul>
+            <select value="Personality Rating" selected="selected">
+            <option value="One of the family">Perfect fit</option>
+            <option value="Will require some training">Will require some training</option>
+            <option value="May require too much training">May require too much training</option>
+            <option value="Someone will end up dead">Someone might die</option>
+            </select>
+        
+        </form>
+        
          
         </div>
            

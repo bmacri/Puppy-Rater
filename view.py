@@ -4,6 +4,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from get_details import DogDetails
 from contextlib import closing
 import settings
+import MySQLdb
 
 DEBUG = True
 SECRET_KEY = settings.secret_key
@@ -12,7 +13,7 @@ PASSWORD = settings.password
 
 
 app = Flask(__name__)
-#app.config.from_object(__name__)
+app.config.from_object(__name__)
 
 dog = DogDetails()
 
@@ -30,33 +31,38 @@ def login():
             error = 'Invalid password'
         else:
             session['logged_in'] = True
-            flash('You were logged in')
             return redirect(url_for('show_all_dogs'))
     return render_template('login.html', error=error)
     
     
-@app.route('/logout')
+@app.route('/logout', methods=['GET','POST'])
 def logout():
     session.pop('logged_in', None)
-    flash('You were logged out')
-    return redirect(url_for('show_all_dogs'))
+    flash('You are now logged out')
+    return redirect(url_for('login'))
 
 
 @app.route('/')
 def show_comments():
     comments = dog.get_comments()
+    print comments
     return render_template('template.html', comments=comments)
 
 @app.route('/add', methods=['POST'])
 def add_comment():
     if not session.get('logged_in'):
-        abort(401)
-    dog.post_comments()
-    flash('Your comment has been saved')
+        print "not logged in"
+        abort(401)        
+    if request.method == 'POST':
+        ratings_dict = {}
+        ratings_dict['spca_id,' (cuteness, personality, comments)] = spca_id, (request.form["Cuteness Rating"], request.form["Personality Rating"], request.form['text'] 
+        
+        dog.insert_comments(comments_dict)
+        flash('Your comment has been saved')
     return redirect(url_for('show_comments'))
-    
+       
 
-@app.route('/dogs')
+@app.route('/dogs', methods=['GET','POST'])
 def show_all_dogs():
     dog_info_list = []
     all_db_data = dog.details_from_db()
@@ -71,11 +77,12 @@ def show_all_dogs():
         db_dog.description = each_dog[6]
         db_dog.image = each_dog[7]
         dog_info_list.append(db_dog)
+    #if dog.select_comments() !
     return render_template('template.html', db_dogs=dog_info_list)
-    
-@app.teardown_request
-def teardown_request(exception):
-    g.db.close()
+  
+@app.route('/test', methods=['POST'])
+def test_func():
+    return 
     
 
 app.debug = True 
