@@ -13,39 +13,41 @@
   {% for each_dog in db_dogs %}
   <div style="float: right;">
         {% if session.logged_in %}
-    <form action="{{ url_for('add_comment') }}" method=post class=add-comment>
-      <dl>
-        <dt>Comments:
-        <dd><textarea name=text rows=5 cols=50></textarea>
-        <input type="hidden" name="spca_id" value=spca_id>
-        <dd><input type=submit value=Save>
-      </dl>
-    
-  {% endif %}
-  <ul class=comments>
-  {% for comment in comments %}
-    <li>{{ comment.text }}
-  {% endfor %}
-  </ul>
+          <ul class=comments>
+              {% for rating in each_dog.ratings_list %}
+                  <li>{{ rating.comment }}</li>
+              {% endfor %}
+          </ul>
         
+            <form action="{{ url_for('add_comment') }}" method=post class=add-comment>
+                   
+        
+        
+ 
         <br>
-        <form action="">
             <select name="Cuteness Rating">
-            <option value="Cutest thing I've ever seen">Cutest thing I've ever seen</option>
-            <option value="Awww">Awww</option>
-            <option value="Pretty cute">Pretty cute</option>
-            <option value="Not bad">Not bad</option>
-            <option value="Woof">Woof</option>
+                <option value="Cutest thing I've ever seen">Cutest thing I've ever seen</option>
+                <option value="Awww">Awww</option>
+                <option value="Pretty cute">Pretty cute</option>
+                <option value="Not bad">Not bad</option>
+                <option value="Woof">Woof</option>
             </select>
             
         
         
-            <select value="Personality Rating" selected="selected">
-            <option value="One of the family">Perfect fit</option>
-            <option value="Will require some training">Will require some training</option>
-            <option value="May require too much training">May require too much training</option>
-            <option value="Someone will end up dead">Someone might die</option>
+            <select name="Personality Rating" selected="selected">
+                <option value="One of the family">Perfect fit</option>
+                <option value="Will require some training">Will require some training</option>
+                <option value="May require too much training">May require too much training</option>
+                <option value="Someone will end up dead">Someone might die</option>
             </select>
+            
+            <dl>
+                <dt>Comments:
+                <dd><textarea name=text rows=5 cols=50></textarea>
+                <input type="hidden" name="spca_id" value="{{ each_dog.spca_id }}">
+                <dd><input type=submit value=Save>
+              </dl>
         
         </form>
         
@@ -64,7 +66,7 @@
         
          
     
-    
+  {% endif %}  
   {% endfor %}
 </ul>
 
