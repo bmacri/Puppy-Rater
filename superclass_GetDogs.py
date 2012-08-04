@@ -97,8 +97,7 @@ class GetDogs():
             db_dog.age = each_dog[5]
             db_dog.description = each_dog[6]
             db_dog.image = each_dog[7]
-            db_dog.ratings_list = self.select_ratings(db_dog.spca_id) 
-            print db_dog.ratings_list 
+            db_dog.ratings_list = self.select_ratings(db_dog.spca_id)  
             dog_info_list.append(db_dog)
         return dog_info_list
         

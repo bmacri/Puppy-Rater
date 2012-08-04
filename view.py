@@ -8,8 +8,8 @@ import MySQLdb
 
 DEBUG = True
 SECRET_KEY = settings.secret_key
-USERNAME = settings.username
-PASSWORD = settings.password
+#USERNAME = settings.username
+#PASSWORD = settings.password
 
 
 app = Flask(__name__)
@@ -20,19 +20,34 @@ dog = DogDetails()
 class DogFromDB():
     pass
     
+class User():
+    pass 
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
+    conn, cursor = dog.mysql_get_cursor()
+    cursor.execute ("SELECT * FROM users;")
+    user_info = cursor.fetchall()  
+    conn.commit()
+    usernames = []
+    passwords = []
+    for user in user_info:
+        User.username = user[1]
+        User.password = user[2]
+        usernames.append(User.username)
+        passwords.append(User.password)  
+    error = None 
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
+        if request.form['username'] not in usernames:
             error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
         else:
-            session['logged_in'] = True
-            session['username'] = request.form['username'] #session carries username information
-            return redirect(url_for('show_all_dogs'))
+            username_index = usernames.index(request.form['username'])
+            if request.form['password'] != passwords[username_index]: 
+                error = 'Invalid password'
+            else:
+                session['logged_in'] = True
+                session['username'] = request.form['username'] #session carries username information
+                return redirect(url_for('show_all_dogs'))
     return render_template('login.html', error=error)
     
     
