@@ -16,3 +16,46 @@ h2              { color: #4490c2; font-size: 6; }
 .flash          { background: #CEE5F5; padding: 0.5em;
                   border: 1px solid #AACBE2; }
 .error          { background: #F0D6D6; padding: 0.5em; }
+
+body {
+  text-align: center;
+}
+
+.heading {
+  text-align: center;
+}
+
+.container {
+  width: 500px;  
+/* Centering for IE6+ in strict mode,
+Firefox, and other modern browsers */
+margin: auto;
+/* Don't center every line of text -
+we inherited this setting from body */
+text-align: left;
+
+}
+  
+.left {
+  float: left;
+  padding: 0px 10px 0px 0px;
+  width: 90px;
+}
+
+.middle {
+  top: 10px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.right {
+  float: right;
+  padding: 0px 10px 0px 10px;
+  width: 90px;
+}
+
+.footer {
+  padding-top: 20px;
+  text-align: center;
+  clear: both;
+}

@@ -3,11 +3,11 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 
 {% if session.logged_in %}
-        <div style="float: right;"><a href="{{ url_for'logout') }}">logout<a><div><br><br>
-    {% endif %}
+    <div style="float: right;"><a href="{{  url_for('logout') }}">Logout<a></div><br><br>
+{% endif %}
 
     <h1>SF SPCA Dogs Available for Adoption</h1><br><br>
-
+        
     <ul style="list-style: none;">
     {% for each_dog in db_dogs %}
         <div style="float: right;">
@@ -16,9 +16,19 @@
                 {% for rating in each_dog.ratings_list %}
                     <li>{{ rating.comment }}</li>
                 {% endfor %}
-                </ul>
-            
-            <form action="{{ url_for('add_comment') }}" method=post class=add-comment><br>
+                </ul>                         
+        </div>
+               
+        
+        <li><img src="{{ each_dog.image }}"></li>
+        <b><font color=#2d658a><li>{{ each_dog.name }}</li></font></b>
+        <font color=#000000><li>{{ each_dog.breed }} - {{ each_dog.color }}</li>
+        <li>{{ each_dog.age }}</li>               
+        <li>{{ each_dog.gender }}</li>
+        <li>{{ each_dog.description }}</font></li><br>
+        
+        What do you think of {{ each_dog.name }}?
+        <form action="{{ url_for('add_comment') }}" id = "form-{{ each_dog.spca_id }}" method=post class=add-comment><br>
                 <select name="Cuteness Rating">
                     <option value="Cutest thing I've ever seen">Cutest thing I've ever seen</option>
                     <option value="Awww">Awww</option>
@@ -35,27 +45,16 @@
                 </select>
                     
                 <dl>
-                    <dt>Comments:
+                    <dt><font color=#000000>Comments:</font color>
                     <dd><textarea name=text rows=5 cols=50></textarea>
                     <input type="hidden" name="spca_id" value="{{ each_dog.spca_id }}">
                     <input type="hidden" name="username" value="{{ session['username'] }}">
                     <dd><input type=submit value=Save>
                 </dl>
                 
-            </form>
-                
-        </div>
-               
-        
-        <li><img src="{{ each_dog.image }}"></li>
-        <b><font color=#2d658a><li>{{ each_dog.name }}</li></font></b>
-        <li>{{ each_dog.breed }} - {{ each_dog.color }}</li>
-        <li>{{ each_dog.age }}</li>               
-        <li>{{ each_dog.gender }}</li>
-        <li>{{ each_dog.description }}</li><br><br><br>
+            </form><br><br>
           
-    
+    {% endif %}
     {% endfor %}
     </ul>
-{% endif %}
 

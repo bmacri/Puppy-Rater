@@ -62,14 +62,13 @@ def add_comment():
         abort(401)        
     if request.method == 'POST':
         ratings_dict = {}
-        ratings_dict['spca_id']  = request.form["spca_id"]
-        ratings_dict['cuteness'] = request.form["Cuteness Rating"]
-        ratings_dict['personality'] =  request.form["Personality Rating"]
+        ratings_dict['spca_id']  = request.form['spca_id']
+        ratings_dict['cuteness'] = request.form['Cuteness Rating']
+        ratings_dict['personality'] =  request.form['Personality Rating']
         ratings_dict['comment'] = request.form['text']
-        dog.insert_ratings_dict(ratings_dict)
-        flash('Your comment has been saved')
+        dog.insert_ratings_dict(ratings_dict)      
     return redirect(url_for('show_all_dogs'))
-       
+      
 
 @app.route('/dogs', methods=['GET','POST'])
 def show_all_dogs():
@@ -84,4 +83,4 @@ def test_func():
 app.debug = True 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')   
+    app.run()   

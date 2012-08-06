@@ -2,7 +2,7 @@ import MySQLdb
 import re
 import requests
 import settings
-import datetime 
+import time 
 
 from superclass_GetDogs import GetDogs
 
@@ -202,8 +202,9 @@ if __name__ == '__main__':
     print data
     filename = 'crontest.txt'
     f = open(filename, 'a')
-    f.write('get_details.py ran at ' + datetime.now().strftime("%A, %d. %B %Y %I:%M%p")+ '\n')
+    f.write('get_details.py ran at ' + str(time.time())+ '\n')
     f.close()
+    
     
     
 
