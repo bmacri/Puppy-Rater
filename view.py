@@ -8,9 +8,6 @@ import MySQLdb
 
 DEBUG = True
 SECRET_KEY = settings.secret_key
-#USERNAME = settings.username
-#PASSWORD = settings.password
-
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -87,4 +84,4 @@ def test_func():
 app.debug = True 
 
 if __name__ == '__main__':
-    app.run()   
+    app.run(host='0.0.0.0')   

@@ -32,8 +32,6 @@ class GetDogs():
         r = self.requests_url_contents(url)
         contents = r.text
         filename = self.create_filename(url)
-        #pdb.set_trace()
-        #print repr(filename)
         f = codecs.open(filename, 'w', encoding='utf-8')
         f.write(contents)
         f.close
@@ -63,7 +61,6 @@ class GetDogs():
         detail_dict['age'] = self.dog_age(contents)
         detail_dict['description'] = self.dog_description(contents)
         detail_dict['image'] = self.dog_image(contents)
-        #print detail_dict
         return detail_dict
     
     def mysql_get_cursor(self):
@@ -120,7 +117,6 @@ class GetDogs():
             ratings_object.personality = rating[3]
             ratings_object.comment = rating[4]
             ratings_list.append(ratings_object)
-        print ratings_list
         return ratings_list
         
             

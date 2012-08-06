@@ -2,6 +2,7 @@ import MySQLdb
 import re
 import requests
 import settings
+import datetime 
 
 from superclass_GetDogs import GetDogs
 
@@ -192,13 +193,18 @@ def populate_db(all_contents):
         dog.dog_details_to_db(dog_detail_dict)
     return
     
-        
+       
         
 if __name__ == '__main__':
     all_contents = dog.return_webpage_contents('http://www.sfspca.org/adoptions/dogs')
     populate_db(all_contents)
     data = dog.details_from_db()
     print data
-
+    filename = 'crontest.txt'
+    f = open(filename, 'a')
+    f.write('get_details.py ran at ' + datetime.now().strftime("%A, %d. %B %Y %I:%M%p")+ '\n')
+    f.close()
+    
+    
 
 

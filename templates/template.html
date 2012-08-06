@@ -3,70 +3,59 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 
 {% if session.logged_in %}
-<div style="float: right;"><a href="{{ url_for('logout') }}">log out</a></div><br><br>
-{% endif %}
+        <div style="float: right;"><a href="{{ url_for'logout') }}">logout<a><div><br><br>
+    {% endif %}
 
-<h1>SF SPCA Dogs Available for Adoption</h1><br><br>
+    <h1>SF SPCA Dogs Available for Adoption</h1><br><br>
 
-<!--MAKE ALL FORMS ONE FORM, THEN STYLE-->
-<ul style="list-style: none;">
-  {% for each_dog in db_dogs %}
-  <div style="float: right;">
-        {% if session.logged_in %}
-          <ul class=comments>
-              {% for rating in each_dog.ratings_list %}
-                  <li>{{ rating.comment }}</li>
-              {% endfor %}
-          </ul>
-        
-            <form action="{{ url_for('add_comment') }}" method=post class=add-comment>
-                   
-        
-        
- 
-        <br>
-            <select name="Cuteness Rating">
-                <option value="Cutest thing I've ever seen">Cutest thing I've ever seen</option>
-                <option value="Awww">Awww</option>
-                <option value="Pretty cute">Pretty cute</option>
-                <option value="Not bad">Not bad</option>
-                <option value="Woof">Woof</option>
-            </select>
+    <ul style="list-style: none;">
+    {% for each_dog in db_dogs %}
+        <div style="float: right;">
+            {% if session.logged_in %}
+                <ul class=comments>
+                {% for rating in each_dog.ratings_list %}
+                    <li>{{ rating.comment }}</li>
+                {% endfor %}
+                </ul>
             
-        
-        
-            <select name="Personality Rating" selected="selected">
-                <option value="One of the family">Perfect fit</option>
-                <option value="Will require some training">Will require some training</option>
-                <option value="May require too much training">May require too much training</option>
-                <option value="Someone will end up dead">Someone might die</option>
-            </select>
-            
-            <dl>
-                <dt>Comments:
-                <dd><textarea name=text rows=5 cols=50></textarea>
-                <input type="hidden" name="spca_id" value="{{ each_dog.spca_id }}">
-                <dd><input type=submit value=Save>
-              </dl>
-        
-        </form>
-        
-         
+            <form action="{{ url_for('add_comment') }}" method=post class=add-comment><br>
+                <select name="Cuteness Rating">
+                    <option value="Cutest thing I've ever seen">Cutest thing I've ever seen</option>
+                    <option value="Awww">Awww</option>
+                    <option value="Pretty cute">Pretty cute</option>
+                    <option value="Not bad">Not bad</option>
+                    <option value="Woof">Woof</option>
+                </select>
+                         
+                <select name="Personality Rating" selected="selected">
+                    <option value="One of the family">Perfect fit</option>
+                    <option value="Will require some training">Will require some training</option>
+                    <option value="May require too much training">May require too much training</option>
+                    <option value="Someone will end up dead">Someone might die</option>
+                </select>
+                    
+                <dl>
+                    <dt>Comments:
+                    <dd><textarea name=text rows=5 cols=50></textarea>
+                    <input type="hidden" name="spca_id" value="{{ each_dog.spca_id }}">
+                    <input type="hidden" name="username" value="{{ session['username'] }}">
+                    <dd><input type=submit value=Save>
+                </dl>
+                
+            </form>
+                
         </div>
-           
-    
+               
+        
         <li><img src="{{ each_dog.image }}"></li>
-        
-        
         <b><font color=#2d658a><li>{{ each_dog.name }}</li></font></b>
         <li>{{ each_dog.breed }} - {{ each_dog.color }}</li>
         <li>{{ each_dog.age }}</li>               
         <li>{{ each_dog.gender }}</li>
         <li>{{ each_dog.description }}</li><br><br><br>
-        
-         
+          
     
-  {% endif %}  
-  {% endfor %}
-</ul>
+    {% endfor %}
+    </ul>
+{% endif %}
 
